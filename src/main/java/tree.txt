@@ -1,0 +1,2 @@
+S -> [var, variable_name, :, Array, <, type, >, 
+E -> [;, $]]
