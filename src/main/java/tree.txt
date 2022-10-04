@@ -1,2 +1,6 @@
-S -> [var, variable_name, :, Array, <, type, >, 
+S -> [var, variable_name, 
+A -> [Array, <, 
+A -> [
+A -> [Array, <, 
+A -> [x], >]], >], 
 E -> [;, $]]

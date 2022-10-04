@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Test;
+
 import java.text.ParseException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -16,10 +17,12 @@ public class ParserTest {
                 new Tree("var"),
                 new Tree("variable_name"),
                 new Tree(":"),
-                new Tree("Array"),
-                new Tree("<"),
-                new Tree("type"),
-                new Tree(">"),
+                new Tree("A",
+                        new Tree("Array"),
+                        new Tree("<"),
+                        new Tree("A",
+                                new Tree("type")),
+                        new Tree(">")),
                 new Tree("E", new Tree(";"), new Tree("$")));
 
         assertThat(new Parser(
@@ -116,10 +119,12 @@ public class ParserTest {
                 new Tree("var"),
                 new Tree("variable_name"),
                 new Tree(":"),
-                new Tree("Array"),
-                new Tree("<"),
-                new Tree("type"),
-                new Tree(">"),
+                new Tree("A",
+                        new Tree("Array"),
+                        new Tree("<"),
+                        new Tree("A",
+                                new Tree("type")),
+                        new Tree(">")),
                 new Tree("E", new Tree(";"), new Tree("$")));
 
         assertThat(new Parser(s).parse())
@@ -133,10 +138,33 @@ public class ParserTest {
                 new Tree("var"),
                 new Tree("variable_name"),
                 new Tree(":"),
-                new Tree("Array"),
-                new Tree("<"),
-                new Tree("type"),
-                new Tree(">"),
+                new Tree("A",
+                        new Tree("Array"),
+                        new Tree("<"),
+                        new Tree("A",
+                                new Tree("type")),
+                        new Tree(">")),
+                new Tree("E", new Tree("$")));
+
+        assertThat(new Parser(s).parse())
+                .usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    void successful_when_nested_arrays() throws ParseException {
+        String s = "var x: Array<Array<Integer>>";
+        Tree expected = new Tree("S",
+                new Tree("var"),
+                new Tree("variable_name"),
+                new Tree(":"),
+                new Tree("A", new Tree("Array"),
+                        new Tree("<"), new Tree("A",
+                        new Tree("A",
+                                new Tree("Array"),
+                                new Tree("<"),
+                                new Tree("A",
+                                        new Tree("type")),
+                                new Tree(">"))), new Tree(">")),
                 new Tree("E", new Tree("$")));
 
         assertThat(new Parser(s).parse())

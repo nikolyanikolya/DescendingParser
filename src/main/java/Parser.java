@@ -39,28 +39,47 @@ public class Parser {
                     tree.addChild(new Tree(node));
                 }
                 case COLON -> {
-                    lex.expect(Token.ARRAY, "Array", curPos);
                     tree.addChild(new Tree(":"));
-                }
-                case ARRAY -> {
-                    lex.expect(Token.LEFT_ANGLE_BRACKET, "<", curPos);
-                    tree.addChild(new Tree("Array"));
-                }
-                case LEFT_ANGLE_BRACKET -> {
-                    lex.expect(Token.IDENTIFIER, "array type", curPos);
-                    tree.addChild(new Tree("<"));
-                }
-                case RIGHT_ANGLE_BRACKET -> {
+                    lex.expect(Token.ARRAY, "Array", curPos);
+                    tree.addChild(A());
+                    lex.nextToken();
                     if (lex.curToken() != Token.SEMICOLON && lex.curToken() != Token.END) {
                         throw LexicalAnalyzer.error("illegal end of statement at position", curPos);
                     }
-                    tree.addChild(new Tree(">"));
                     tree.addChild(E());
                     return tree;
                 }
+
                 default -> throw new AssertionError();
             }
         }
+    }
+
+    Tree A() throws ParseException {
+        while (true) {
+            switch (lex.curToken()) {
+                case ARRAY -> {
+                    var curPos = lex.curPos();
+                    lex.nextToken();
+                    lex.expect(Token.LEFT_ANGLE_BRACKET, "<", curPos);
+                }
+                case LEFT_ANGLE_BRACKET -> {
+                    lex.nextToken();
+                    var sub = A();
+                    lex.nextToken();
+                    lex.expect(Token.RIGHT_ANGLE_BRACKET, ">", lex.curPos());
+                    return new Tree("A", new Tree("Array"), new Tree("<"), new Tree("A", sub), new Tree(">"));
+                }
+                case RIGHT_ANGLE_BRACKET -> {
+                }
+                case IDENTIFIER -> {
+                    return new Tree("type");
+                }
+
+                default -> throw new AssertionError();
+            }
+        }
+
     }
 
     Tree E() throws ParseException {

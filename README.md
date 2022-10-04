@@ -9,15 +9,18 @@
 | \\>        |                   '>'                   |
  | empty      |                   ""                    |  
 
-| NonTerminals |  First   | Follow | Description                            |
-|--------------|:--------:|--------|----------------------------------------|
-| S            |   var    | $      | declaration statement (start terminal) |
-| E            | empty, ; | $      | end of the statement                   |  
+| NonTerminals |  First   | Follow   | Description                            |
+|--------------|:--------:|----------|----------------------------------------|
+| S            |   var    | $        | declaration statement (start terminal) |
+| E            | empty, ; | $        | end of the statement                   |  
+| A            |  Array   | empty, ; | type of variable                       |
 
 
 Grammar:  
 
-S -> varx:Array<x\>E  
+S -> varx:AE  
+A -> x
+A -> Array\<A>
 E -> ;  
 E -> empty
 
