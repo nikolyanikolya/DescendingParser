@@ -171,4 +171,26 @@ public class ParserTest {
                 .usingRecursiveComparison().isEqualTo(expected);
     }
 
+    @Test
+    void incorrect_number_of_right_angle_brackets() throws ParseException {
+        String s = "var x: Array<Array<Integer>";
+        Tree expected = new Tree("S",
+                new Tree("var"),
+                new Tree("variable_name"),
+                new Tree(":"),
+                new Tree("A", new Tree("Array"),
+                        new Tree("<"), new Tree("A",
+                        new Tree("A",
+                                new Tree("Array"),
+                                new Tree("<"),
+                                new Tree("A",
+                                        new Tree("type")),
+                                new Tree(">"))), new Tree(">")),
+                new Tree("E", new Tree("$")));
+
+        assertThatThrownBy(() -> new Parser(s).parse())
+                .isInstanceOf(ParseException.class)
+                .hasMessageStartingWith("> expected at position");
+    }
+
 }
