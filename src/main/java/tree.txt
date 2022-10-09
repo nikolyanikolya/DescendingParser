@@ -1,6 +1,0 @@
-S -> [var, variable_name, 
-A -> [Array, <, 
-A -> [
-A -> [Array, <, 
-A -> [x], >]], >], 
-E -> [;, $]]

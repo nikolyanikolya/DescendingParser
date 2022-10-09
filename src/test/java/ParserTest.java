@@ -25,9 +25,8 @@ public class ParserTest {
                         new Tree(">")),
                 new Tree("E", new Tree(";"), new Tree("$")));
 
-        assertThat(new Parser(
-                s)
-                .parse()).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(new Parser(s).parse())
+                .usingRecursiveComparison().isEqualTo(expected);
     }
 
 

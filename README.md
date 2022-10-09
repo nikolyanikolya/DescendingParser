@@ -16,7 +16,7 @@
 | A            |  Array   | empty, ; | type of variable                       |
 
 
-Grammar:  
+* **Grammar**:  
 
 S -> varx:AE  
 A -> x
@@ -24,12 +24,11 @@ A -> Array\<A>
 E -> ;  
 E -> empty
 
-Tree Visualization format:
+* **Tree Visualization format**:
 
-Nonterminal -> [Terminal, Terminal, ... ,   
-NonTerminal -> [Terminal]]
+GraphStream library was used.
 
-Demo version locates in main/java/Main.java. Note that the result of parsing is in tree.txt file.
+Demo version locates in main/java/Main.java.
 
-Tests:  
+* **Tests**:  
 I think the names of the tests explain purposes of writing them
