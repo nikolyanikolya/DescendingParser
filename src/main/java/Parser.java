@@ -1,5 +1,6 @@
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
@@ -68,7 +69,10 @@ public class Parser {
                     var sub = A();
                     lex.nextToken();
                     lex.expect(Token.RIGHT_ANGLE_BRACKET, ">", lex.curPos());
-                    return new Tree("A", new Tree("Array"), new Tree("<"), new Tree("A", sub), new Tree(">"));
+                    if (sub.children.isEmpty()) {
+                        return new Tree("A", new Tree("Array"), new Tree("<"), new Tree("A", sub), new Tree(">"));
+                    }
+                    return new Tree("A", new Tree("Array"), new Tree("<"), sub, new Tree(">"));
                 }
                 case RIGHT_ANGLE_BRACKET -> {
                 }

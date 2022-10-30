@@ -157,13 +157,13 @@ public class ParserTest {
                 new Tree("variable_name"),
                 new Tree(":"),
                 new Tree("A", new Tree("Array"),
-                        new Tree("<"), new Tree("A",
+                        new Tree("<"),
                         new Tree("A",
                                 new Tree("Array"),
                                 new Tree("<"),
                                 new Tree("A",
                                         new Tree("type")),
-                                new Tree(">"))), new Tree(">")),
+                                new Tree(">")), new Tree(">")),
                 new Tree("E", new Tree("$")));
 
         assertThat(new Parser(s).parse())
@@ -171,21 +171,8 @@ public class ParserTest {
     }
 
     @Test
-    void incorrect_number_of_right_angle_brackets() throws ParseException {
+    void incorrect_number_of_right_angle_brackets() {
         String s = "var x: Array<Array<Integer>";
-        Tree expected = new Tree("S",
-                new Tree("var"),
-                new Tree("variable_name"),
-                new Tree(":"),
-                new Tree("A", new Tree("Array"),
-                        new Tree("<"), new Tree("A",
-                        new Tree("A",
-                                new Tree("Array"),
-                                new Tree("<"),
-                                new Tree("A",
-                                        new Tree("type")),
-                                new Tree(">"))), new Tree(">")),
-                new Tree("E", new Tree("$")));
 
         assertThatThrownBy(() -> new Parser(s).parse())
                 .isInstanceOf(ParseException.class)
