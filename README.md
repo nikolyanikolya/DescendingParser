@@ -21,6 +21,7 @@
 S -> varx:AE  
 A -> x
 A -> Array\<A>
+A -> Map<A, A>
 E -> ;  
 E -> empty
 

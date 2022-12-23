@@ -18,6 +18,8 @@ public class GrammarElementsCounter {
         grammarElementsCounter.put(";", 0L);
         grammarElementsCounter.put("$", 0L);
         grammarElementsCounter.put("var", 0L);
+        grammarElementsCounter.put("Map", 0L);
+        grammarElementsCounter.put(",", 0L);
     }
 
     public Long get(String key) {

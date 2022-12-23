@@ -1,6 +1,5 @@
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
@@ -41,7 +40,9 @@ public class Parser {
                 }
                 case COLON -> {
                     tree.addChild(new Tree(":"));
-                    lex.expect(Token.ARRAY, "Array", curPos);
+                    if (lex.curToken() != Token.ARRAY && lex.curToken() != Token.MAP) {
+                        throw LexicalAnalyzer.error("array or map expected at position", curPos);
+                    }
                     tree.addChild(A());
                     lex.nextToken();
                     if (lex.curToken() != Token.SEMICOLON && lex.curToken() != Token.END) {
@@ -59,6 +60,40 @@ public class Parser {
     Tree A() throws ParseException {
         while (true) {
             switch (lex.curToken()) {
+                case MAP -> {
+                    lex.nextToken();
+                    lex.expect(Token.LEFT_ANGLE_BRACKET, "<", lex.curPos());
+                    lex.nextToken();
+                    var key = A();
+                    lex.nextToken();
+                    lex.expect(Token.COMMA, ",", lex.curPos());
+                    lex.nextToken();
+                    var value = A();
+                    lex.nextToken();
+                    lex.expect(Token.RIGHT_ANGLE_BRACKET, ">", lex.curPos());
+                    if (key.children.isEmpty() && value.children.isEmpty()) {
+                        return new Tree("A",
+                                new Tree("Map"), new Tree("<"),
+                                new Tree("A", key), new Tree(","),
+                                new Tree("A", value), new Tree(">"));
+                    } else if (key.children.isEmpty()) {
+                        return new Tree("A",
+                                new Tree("Map"), new Tree("<"),
+                                new Tree("A", key), new Tree(","),
+                                value, new Tree(">"));
+                    } else if (value.children.isEmpty()) {
+                        return new Tree("A",
+                                new Tree("Map"), new Tree("<"),
+                                key, new Tree(","),
+                                new Tree("A", value), new Tree(">"));
+                    }
+                    return new Tree("A",
+                            new Tree("Map"), new Tree("<"),
+                            key, new Tree(","),
+                            value, new Tree(">"));
+                }
+                case COMMA -> {
+                }
                 case ARRAY -> {
                     var curPos = lex.curPos();
                     lex.nextToken();

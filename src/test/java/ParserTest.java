@@ -62,13 +62,13 @@ public class ParserTest {
 
 
     @Test
-    void not_an_array() {
+    void not_an_array_and_map() {
         String s = "var x: NotArray<Integer>;";
 
         assertThatThrownBy(() -> new Parser(s)
                 .parse())
                 .isInstanceOf(ParseException.class)
-                .hasMessageStartingWith("Array expected at position");
+                .hasMessageStartingWith("array or map expected at position");
     }
 
     @Test
@@ -161,6 +161,30 @@ public class ParserTest {
                         new Tree("A",
                                 new Tree("Array"),
                                 new Tree("<"),
+                                new Tree("A",
+                                        new Tree("type")),
+                                new Tree(">")), new Tree(">")),
+                new Tree("E", new Tree("$")));
+
+        assertThat(new Parser(s).parse())
+                .usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    void successful_when_nested_maps() throws ParseException {
+        String s = "var x: Array<Map<Integer, Integer>>";
+        Tree expected = new Tree("S",
+                new Tree("var"),
+                new Tree("variable_name"),
+                new Tree(":"),
+                new Tree("A", new Tree("Array"),
+                        new Tree("<"),
+                        new Tree("A",
+                                new Tree("Map"),
+                                new Tree("<"),
+                                new Tree("A",
+                                        new Tree("type")),
+                                        new Tree(","),
                                 new Tree("A",
                                         new Tree("type")),
                                 new Tree(">")), new Tree(">")),

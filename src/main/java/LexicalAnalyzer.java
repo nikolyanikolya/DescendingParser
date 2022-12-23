@@ -2,7 +2,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 
-import static java.lang.Character.*;
+import static java.lang.Character.isJavaIdentifierPart;
+import static java.lang.Character.isWhitespace;
 
 public class LexicalAnalyzer {
     private final InputStream is;
@@ -30,6 +31,10 @@ public class LexicalAnalyzer {
             nextChar();
         }
         switch (curChar) {
+            case ',' -> {
+                nextChar();
+                curToken = Token.COMMA;
+            }
             case ':' -> {
                 nextChar();
                 curToken = Token.COLON;
@@ -57,6 +62,8 @@ public class LexicalAnalyzer {
                     case "var" -> curToken = Token.VAR;
 
                     case "Array" -> curToken = Token.ARRAY;
+
+                    case "Map" -> curToken = Token.MAP;
 
                     default -> curToken = Token.IDENTIFIER;
                 }
